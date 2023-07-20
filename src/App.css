@@ -15,7 +15,7 @@
 
 @media screen and (min-width: 600px) {
   .auth-form-container {
-    padding: 5rem;
+    padding: 3rem;
     border: 1px solid white;
     border-radius: 10px;
     margin: 0.5rem;
@@ -37,7 +37,7 @@ input {
 button {
   border: none;
   background-color: white;
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
   cursor: pointer;
   color: #7439db;
@@ -49,13 +49,6 @@ button {
   text-decoration: underline;
 }
 
-tr {
-  display: block;
-  float: left;
-}
-th,td {
-  display: block;
-  text-align: left;
-  padding: 6px;
-  border: 1px solid #ccc;
+.li{
+  color: black;
 }

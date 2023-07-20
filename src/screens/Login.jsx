@@ -2,10 +2,10 @@ import axios from 'axios';
 import React, { useState } from "react";
 
 const baseUrl = "http://localhost:8082/api/login"
-export const Login = (params) => {
+export const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPass] = useState('');
-    const [jwtToken, setJwtToken] = useState('');
+    const [user, setUser] = useState({});
 
     const performLogin = async (e) => {
         e.preventDefault();
@@ -21,10 +21,9 @@ export const Login = (params) => {
                 password: password,
               })
               .then((response) => {
-                setJwtToken(response.data.token.toString())
-                console.log("Response: ",response.data.token)
-                params.handleLogin(response.data.token, "login")
-                console.log("jwtToken: ", jwtToken)
+                console.log(response)
+                setUser(response.data)
+                props.handleLogin(response.data, "weather")
               });            
           }catch(error){
             console.error("Login failed")
@@ -41,7 +40,7 @@ export const Login = (params) => {
         <input value={password} onChange={(e) => setPass(e.target.value)} type="password" placeholder="********" id="password" name="password"/>
         <button type="submit">Log In</button>
        </form>
-       <button className="link-btn" onClick={() => params.handleLogin('','register')}>Don't have an account? Register here</button>
+       <button className="link-btn" onClick={() => props.handleLogin('','register')}>Don't have an account? Register here</button>
        </div>
     )
 }
