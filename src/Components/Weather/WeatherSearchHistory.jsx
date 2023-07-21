@@ -3,7 +3,7 @@ export const WeatherSearchHistory = (props) => {
         <div>
            
           <h3>Weather Search History:</h3>
-          <button className="link-btn" onClick={() => deleteSelected()}><h4>Delete Selected</h4></button>
+          {/* <button className="link-btn" onClick={() => deleteSelected()}><h4>Delete Selected</h4></button>
           <table>
             <thead>
               <th>City</th>
@@ -27,7 +27,7 @@ export const WeatherSearchHistory = (props) => {
               })
               }
             </tbody>
-          </table>
+          </table> */}
         </div>
     )
 }

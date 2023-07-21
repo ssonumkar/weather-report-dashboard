@@ -2,9 +2,10 @@ import axios from "axios";
 import React, {useState} from "react";
 import logo from './logo.svg';
 import './App.css';
-import { Login } from './screens/Login'
-import { Register } from './screens/Register'
-import { Weather } from './screens/Weather'
+import { Login } from './Components/Auth/Login'
+import { Register } from './Components/Auth/Register'
+import { Weather } from './Components/Weather/Weather'
+import AuthState from "./Context/AuthContext/AuthState";
 function App() {
   const [currentForm, setCurrentForm] = useState('login');
   const [user, setUser] = useState({});
@@ -62,7 +63,7 @@ function App() {
       case "register":   return <Register onFormSwitch={toggleForm}/>;
       case "weather": 
             if(isLoggedIn) 
-                  return <Weather user={user}  logout={handleLogout} switchForm={toggleForm}/>;
+                  return <Weather switchForm={toggleForm}/>;
             else
                   return <Login handleLogin={handleLogin}/>;
 
@@ -70,7 +71,7 @@ function App() {
     }
   }
   return (
-    
+    <AuthState>
     <div className="App">
       {
         project()
@@ -83,7 +84,7 @@ function App() {
           <Route path="/" element={<Navigate to="/login" />} />
         </Routes> */}
     </div>
-    
+    </AuthState>
   );
 }
 

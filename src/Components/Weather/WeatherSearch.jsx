@@ -1,6 +1,11 @@
-export const WeatherData = (props) => {
+import { useContext } from "react"
+import AuthContext from "../../Context/AuthContext/AuthContext"
+
+export const WeatherSearch = (props) => {
+    const auth = useContext(AuthContext)
     return (
         <div>
+         <h2>Weather Search</h2> 
         <label>Enter City Name: </label>
         <input type="text" list="suggestions" placeholder="City" value={city} onChange={handleCityChange} />
         <datalist id="suggestions">

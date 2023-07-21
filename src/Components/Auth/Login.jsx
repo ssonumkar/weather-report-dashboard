@@ -1,8 +1,10 @@
 import axios from 'axios';
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-const baseUrl = "http://localhost:8082/api/login"
 export const Login = (props) => {
+  const baseUrl = "http://localhost:8082/api/login"
+
     const [email, setEmail] = useState('');
     const [password, setPass] = useState('');
     const [user, setUser] = useState({});
@@ -41,6 +43,9 @@ export const Login = (props) => {
         <button type="submit">Log In</button>
        </form>
        <button className="link-btn" onClick={() => props.handleLogin('','register')}>Don't have an account? Register here</button>
+       {/* <Link className="nav-link active" aria-current="page" to="/register">Register</Link> */}
+
        </div>
     )
 }
+
