@@ -1,20 +1,53 @@
 import { useState } from "react";
 import AuthContext from "./AuthContext";
-
+import axios from "axios";
 const AuthState = (props) => {
-    const s1 = {
-        "loggedIn": false,
-        "user": {
-            "id": -1,
-            "username": "sadas",
-            "jwt_token": ""
-        }
+    const logState = useState(false)
+    const userState = useState({
+      id: -1,
+      username: "",
+      jwt_token: ""
+    })
+    const loginInfo = {isLoggedIn: logState, user: userState}
+    const updateLoginInfo = (loginStatus, userInfo) =>{
+      console.log("userInfo: ", userInfo)
+      loginInfo.isLoggedIn= loginStatus
+      loginInfo.user = userInfo
+      console.log("called--", loginInfo)
     }
-    const [state, setAuth] = useState(s1);
+    const [currentForm, setCurrentForm] = useState('login');
 
+    const logOutURL = "http://localhost:8082/api/logout"
+    const handleLogout = async () => {
+        console.log("handling logout for user: ", loginInfo.user)
+        const logoutConfig = {
+          headers:{
+            "Authorization": loginInfo.user.jwt_token,
+          }
+        }
+        try{
+    
+          const response = await axios.post(logOutURL,"" , logoutConfig)
+          console.log(response)
+          if(response.status == "200"){
+           updateLoginInfo(false, {})
+           setCurrentForm("login");
+          }
+          else
+          {
+            console.error("Error logging out, ")
+            alert("Error logging out ")
+            setCurrentForm("login");
+          }
+          
+        }catch(error){
+          console.error(error)
+          setCurrentForm("login");
+        }
+      };
     return (
         <>
-            <AuthContext.Provider value={{state, setAuth}}>
+            <AuthContext.Provider value={{loginInfo, updateLoginInfo, currentForm, setCurrentForm, handleLogout}}>
                 {props.children}
             </AuthContext.Provider>
         </>

@@ -1,90 +1,45 @@
-import axios from "axios";
-import React, {useState} from "react";
-import logo from './logo.svg';
+import React, {useContext, useState} from "react";
 import './App.css';
 import { Login } from './Components/Auth/Login'
 import { Register } from './Components/Auth/Register'
 import { Weather } from './Components/Weather/Weather'
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import AuthState from "./Context/AuthContext/AuthState";
+import { WeatherSearch } from "./Components/Weather/WeatherSearch";
+import { WeatherSearchHistory } from "./Components/Weather/WeatherSearchHistory";
+import AuthContext from "./Context/AuthContext/AuthContext";
 function App() {
-  const [currentForm, setCurrentForm] = useState('login');
-  const [user, setUser] = useState({});
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const logOutURL = "http://localhost:8082/api/logout"
-  
-  const toggleForm = (formName) =>{
-    setCurrentForm(formName)
-  }
- 
-  const handleLogin = (user, formName) => {
-    setIsLoggedIn(true);
-    setUser(user);
-    toggleForm(formName)
-    console.log(user)
-  };
+  const auth = useContext(AuthContext)
 
-  const handleLogout = async () => {
-    console.log("handling logout for user: ", user)
-    const logoutConfig = {
-      headers:{
-        "Authorization": user.jwt_token.toString(),
-      }
-    }
-    try{
+  // const isLoggedIn = false
+  // const setCurrentForm = (currentForm, isLoggedIn) => {
+  //   isLoggedIn = isLoggedIn
+  //   switch(currentForm) {
 
-      console.log(logoutConfig.headers.Authorization = user.jwt_token )
-      const response = await axios.post(logOutURL,"" , {
-        headers:{
-          "Authorization": user.jwt_token.toString(),
-        }})
-      console.log(response)
-      if(response.status == "200"){
-        setIsLoggedIn(false);
-        setUser({});
-        setCurrentForm("login");
-      }
-      else
-      {
-        alert("Error logging out, try logging again")
-        setCurrentForm("login");
-      }
-      
-    }catch(error){
-      console.error(error)
-    }
-   
-  };
+  //     case "login":   return <Login />;
+  //     case "register":   return <Register/>;
+  //     case "weather": 
+  //           if(isLoggedIn) 
+  //                 return <Weather/>;
+  //           else
+  //                 return <Login />;
 
-  const project = () => {
-    console.log("inside project: ", user.jwt_token)
-    switch(currentForm) {
-
-      case "login":   return <Login handleLogin={handleLogin}/>;
-      case "register":   return <Register onFormSwitch={toggleForm}/>;
-      case "weather": 
-            if(isLoggedIn) 
-                  return <Weather switchForm={toggleForm}/>;
-            else
-                  return <Login handleLogin={handleLogin}/>;
-
-      default:      return <h1>No project match</h1>
-    }
-  }
+  //     default:      return <h1>No project match</h1>
+  //   }
+  // }
   return (
     <AuthState>
-    <div className="App">
-      {
-        project()
-        // currentForm == "login" ? <Login onFormSwitch={toggleForm}/> : <Register onFormSwitch={toggleForm}/>
-      }
-      {/* <Routes>
-          <Route path="/login" element={<Login onLogin={handleLogin} />} />
-          <Route path="/register" element={<Register onLogin={handleLogin} />} />
-          <Route path="/weather" element={isLoggedIn ? <Weather username={username} onLogout={handleLogout} /> : <Navigate to="/login" />} />
-          <Route path="/" element={<Navigate to="/login" />} />
-        </Routes> */}
-    </div>
-    </AuthState>
+    <BrowserRouter>
+    
+          <Routes>
+          <Route exact path="/" element={<Login />}/>
+          <Route exact path="/register" element = {<Register/>}/>
+          <Route exact path="/weather" element = {<Weather/>}/>
+          <Route exact path="/weather-search" element={<WeatherSearch />}/>
+          <Route exact path="/weather-search-history" element = {<WeatherSearchHistory />}/>
+          </Routes>
+  </BrowserRouter>
+  </AuthState>
   );
 }
 
