@@ -7,9 +7,9 @@ export const Register = (props) => {
     const [password, setPass] = useState('');
     const [dob, setDOB] = useState(new Date());
     const baseUrl = "http://localhost:8082/api/register"
+    const navigate = useNavigate()
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const registerUser = async () => {
         console.log(email, ", ", password, ", ", dob);
         if (email == "" || password == "" || dob == null) {
             alert("Please provide valid inputs")
@@ -24,28 +24,17 @@ export const Register = (props) => {
                 }).then((response) => {
                     console.log(response)
                 })
-            props.onFormSwitch('login')
+            alert("User registration successful")
+            navigate("/")
         } catch (error) {
             console.log("User registration failed")
             alert("User registration failed, please provide valid inputs.")
         }
     }
     return (
-        // <div className="auth-form-container">
-        // <form className="register-form" onSubmit={handleSubmit}>
-        //  <label htmlFor="email">Email</label>
-        //  <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="youremail@gmail.com" id="email" name="email"/>
-        //  <label htmlFor="password">Password</label>
-        //  <input value={password} onChange={(e) => setPass(e.target.value)} type="password" placeholder="********" id="password" name="password"/>
-        //  <label htmlFor="dob">Birth Date</label>
-        //  <input value={dob} onChange={(e) => setDOB(e.target.value)} type="date" placeholder="" id="dob" name="dob"/>
-
-        //  <button type="submit">Register</button>
-        // </form>
-        // <Link className="nav-link active" aria-current="page" to="/">Login</Link>
-        // </div>
+       
         <div>
-            <section className="vh-100" style={{ "background-color": "#508bfc;" }} onSubmit={handleSubmit}>
+            <section className="vh-100" style={{ "background-color": "#508bfc;" }} >
                 <div className="container py-5 h-100">
                     <div className="row d-flex justify-content-center align-items-center h-100">
                         <div className="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -69,7 +58,7 @@ export const Register = (props) => {
                                         <input type="password" value={password} onChange={(e) => setPass(e.target.value)} id="password" className="form-control form-control-lg" />
                                     </div>
 
-                                    <button className="btn btn-primary btn-lg btn-block" type="submit">Register</button>
+                                    <button className="btn btn-primary btn-lg btn-block" onClick={() => registerUser()}>Register</button>
 
                                     <hr className="my-4" />
                                     <Link className="nav-link active" aria-current="page" to="/">Already have account? Login</Link>

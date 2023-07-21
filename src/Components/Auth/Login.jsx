@@ -43,20 +43,8 @@ export const Login = (props) => {
       alert('Invalid email or password. Please try again')
     }
   }
-  const handleRegister = () => {
-    navigate('/register')
-
-  }
   return (
     <div >
-      {/* //  <form className="login-form" onSubmit={performLogin}>
-      //   <label htmlFor="email">Email</label>
-      //   <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="youremail@gmail.com" id="email" name="email"/>
-      //   <label htmlFor="password">Password</label>
-      //   <input value={password} onChange={(e) => setPass(e.target.value)} type="password" placeholder="********" id="password" name="password"/>
-      //   <button type="submit">Log In</button>
-      //  </form>
-      //  {/* <button className="link-btn" onClick={() => handleRegister()}>Don't have an account? Register here</button> */}
       <section className="vh-100" style={{ "background-color": "#508bfc;" }} >
         <div className="container py-5 h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
