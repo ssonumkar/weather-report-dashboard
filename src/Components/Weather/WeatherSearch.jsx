@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import AuthContext from "../../Context/AuthContext/AuthContext";
 import { useContext } from "react"
 import WeatherNavbar from "../WeatherNavbar";
-
+import { useNavigate } from "react-router-dom";
+import { handleError } from "../error.js"
 export const WeatherSearch = (props) => {
   const auth = useContext(AuthContext)
+  const navigate = useNavigate()
   const weatherURL = 'http://localhost:8082/api/weather'
   const geoURL = 'http://api.openweathermap.org/geo/1.0/direct';
   const baseURL = 'http://localhost:8082/api/weather/history'
@@ -28,7 +30,7 @@ export const WeatherSearch = (props) => {
   }
   const weatherDataConfig = {
     headers: {
-      Authorization: auth.loginInfo.user.jwt_token,
+      Authorization: "",
     },
     params: {
       city: "",
@@ -38,6 +40,7 @@ export const WeatherSearch = (props) => {
     }
   };
   const handleSearchWeather = async () => {
+
     console.log("suggestions: ", suggestions)
 
     if (city.trim() === '') {
@@ -48,15 +51,10 @@ export const WeatherSearch = (props) => {
     weatherDataConfig.params.lat = suggestions[0].lat
     weatherDataConfig.params.lon = suggestions[0].lon
     weatherDataConfig.headers.Authorization = auth.loginInfo.user.jwt_token
-    console.log(auth.loginInfo.user.jwt_token)
-    console.log(weatherDataConfig)
     try {
       await axios.get(weatherURL,
         weatherDataConfig).then((response) => {
-          if (response.status == 401) {
-            auth.handleLogout()
-            return
-          }
+         
           setWeatherData({
             city: response.data.city,
             main: {
@@ -66,19 +64,14 @@ export const WeatherSearch = (props) => {
             }
           });
           weatherHistoryBody.city = response.data.city;
-          weatherHistoryBody.feels_like = response.data.feels_like;
-          weatherHistoryBody.temp_max = response.data.temp_max;
-          weatherHistoryBody.temp_min = response.data.temp_min;
+          weatherHistoryBody.feels_like = parseFloat(response.data.main.feels_like);
+          weatherHistoryBody.temp_max = parseFloat(response.data.main.temp_max);
+          weatherHistoryBody.temp_min = parseFloat(response.data.main.temp_min);
           
         });
-
     } catch (error) {
-      console.log("Error fetching weather data: ", error)
+      handleError(error, navigate, "Could not fetch weather data")
     }
-    // Update the weatherData state with the response from the backend
-
-    console.log("weather: ", weather)
-
     try {
       await axios.post(
         baseURL,
@@ -89,17 +82,11 @@ export const WeatherSearch = (props) => {
           }
         }
       ).then((response) => {
-        console.log(response)
-        if (response.status == 401) {
-          auth.handleLogout()
-          return
-        }
+        console.log("Inserted successfully")
+        
       })
     } catch (error) {
-
-      console.error('Error inserting weather  searching data:', error);
-      alert('Error fetching weather data. Please try again later.');
-      // props.logout()
+      handleError(error, navigate, "Could not insert weather search data")
     }
   };
   const fetchSuggestions = async (query) => {
@@ -113,7 +100,7 @@ export const WeatherSearch = (props) => {
       });
       return response.data;
     } catch (error) {
-      console.error('Error fetching city suggestions:', error);
+      handleError(error, navigate, 'Error fetching city suggestions');
       return [];
     }
   };

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useContext } from "react"
 import AuthContext from '../../Context/AuthContext/AuthContext';
 import { Link, useNavigate } from "react-router-dom"
+import { handleError } from '../error';
 
 // import { useNavigate } from "react-router-dom";
 
@@ -30,17 +31,14 @@ export const Login = (props) => {
         password: password,
       })
         .then((response) => {
-          console.log(response)
           auth.updateLoginInfo(true,response.data)
-          console.log(auth.loginInfo)
-          console.log(auth.currentForm)
           navigate('/weather-search')
-          console.log(auth.loginInfo)
-          console.log(auth.currentForm)
         });
     } catch (error) {
-      console.error("Login failed", error)
-      alert('Invalid email or password. Please try again')
+      var message = ""
+      if(error.response.data.error.includes("User already has a session logged in"))
+      alert("User already has a session logged in, Only one session at a time is possible")
+      handleError(error, navigate, "Login Failed ")
     }
   }
   return (

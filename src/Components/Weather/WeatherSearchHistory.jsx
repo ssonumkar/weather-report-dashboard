@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import AuthContext from "../../Context/AuthContext/AuthContext";
 import { useContext } from "react"
 import WeatherNavbar from "../WeatherNavbar";
+import { handleError } from "../error.js"
+import { useNavigate } from "react-router-dom";
 
 export const WeatherSearchHistory = (props) => {
   const auth = useContext(AuthContext)
@@ -10,7 +12,7 @@ export const WeatherSearchHistory = (props) => {
   const baseURL = 'http://localhost:8082/api/weather/history'
   const weatherHistoryGetUrl = baseURL+"/"+auth.loginInfo.user.id
   const [history, setHistory] = useState([]);
-
+  const navigate = useNavigate()
   const weatherHistoryconfig = {
     headers:{
       Authorization: auth.loginInfo.user.jwt_token,
@@ -27,11 +29,7 @@ export const WeatherSearchHistory = (props) => {
             setHistory(response.data)
          });
         }catch(error){
-          console.error(error)
-          // if(error.response.status == 401){
-          //   props.switchForm("login")
-          //   return
-          // }
+          handleError(error, navigate, "Could not fetch weather search history")
         }
   }
   const handleCheck = (e) => {
@@ -60,23 +58,15 @@ export const WeatherSearchHistory = (props) => {
             }
           }
          ).then((response)=>{
-          console.log(response)
-          if(response.status == 200)
-          {
-            loadWeatherHistory()
+         loadWeatherHistory()
             resetAllCheckboxes()
             historyIds.clear()
-          }
+          
         });
       }catch(error){
-        console.log(error)
-        if(error.response && error.response.status == 401){
-          auth.handleLogout()
-          return
-        }
+        handleError(error, navigate, "Could not delete weather search history")
       }
   }
-    // getWeatherHistory()
     return (
         <div >
 

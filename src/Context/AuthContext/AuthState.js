@@ -31,18 +31,15 @@ const AuthState = (props) => {
           console.log(response)
           if(response.status == "200"){
            updateLoginInfo(false, {})
-           setCurrentForm("login");
           }
           else
           {
             console.error("Error logging out, ")
             alert("Error logging out ")
-            setCurrentForm("login");
           }
           
         }catch(error){
           console.error(error)
-          setCurrentForm("login");
         }
       };
     return (
