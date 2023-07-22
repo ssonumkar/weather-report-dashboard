@@ -4,32 +4,30 @@ import { useContext } from "react"
 import AuthContext from '../../Context/AuthContext/AuthContext';
 import { Link, useNavigate } from "react-router-dom"
 import { handleError } from '../error';
+import configData from "../../config.json";
 
 // import { useNavigate } from "react-router-dom";
 
 export const Login = (props) => {
   const navigate = useNavigate()
 
-  const baseUrl = "http://localhost:8082/api/login"
-  // const navigate = useNavigate();
-
-
   const [email, setEmail] = useState('');
   const [password, setPass] = useState('');
   // const [user, setUser] = useState({});
   const auth = useContext(AuthContext)
   const performLogin = async (e) => {
-    console.log(email, " : ", password);
+    
+    
     if (email.trim() === '' || password.trim() === '') {
       alert('Please enter both username and password.');
       return;
     }
-
+    configData.LOGIN.POST.body ={
+      username: email,
+      password: password,
+    }
     try {
-      await axios.post(baseUrl, {
-        username: email,
-        password: password,
-      })
+      await axios.post(configData.LOGIN.baseUrl, configData.LOGIN.POST.body)
         .then((response) => {
           auth.updateLoginInfo(true,response.data)
           navigate('/weather-search')
@@ -43,7 +41,7 @@ export const Login = (props) => {
   }
   return (
     <div >
-      <section className="vh-100" style={{ "background-color": "#508bfc;" }} >
+      <section className="vh-100" style={{ backgroundColor: "#508bfc" }} >
         <div className="container py-5 h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -53,12 +51,12 @@ export const Login = (props) => {
                   <h3 className="mb-5">Sign in</h3>
 
                   <div className="form-outline mb-4">
-                    <label className="form-label" for="typeEmailX-2">Email</label>
+                    <label className="form-label" htmlFor="typeEmailX-2">Email</label>
                     <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" id="typeEmailX-2" className="form-control form-control-lg" />
                   </div>
 
                   <div className="form-outline mb-4">
-                    <label className="form-label" for="typePasswordX-2">Password</label>
+                    <label className="form-label" htmlFor="typePasswordX-2">Password</label>
 
                     <input value={password} onChange={(e) => setPass(e.target.value)} type="password" id="typePasswordX-2" className="form-control form-control-lg" />
                   </div>

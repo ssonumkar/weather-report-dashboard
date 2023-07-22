@@ -5,12 +5,12 @@ import { useContext } from "react"
 import WeatherNavbar from "../WeatherNavbar";
 import { useNavigate } from "react-router-dom";
 import { handleError } from "../error.js"
+import configData from "../../config.json";
+
 export const WeatherSearch = (props) => {
   const auth = useContext(AuthContext)
   const navigate = useNavigate()
-  const weatherURL = 'http://localhost:8082/api/weather'
   const geoURL = 'http://api.openweathermap.org/geo/1.0/direct';
-  const baseURL = 'http://localhost:8082/api/weather/history'
   const [city, setCity] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [weather, setWeatherData] = useState({
@@ -21,69 +21,53 @@ export const WeatherSearch = (props) => {
       feels_like: 0.0
     }
   });
-  var weatherHistoryBody = {
-    user_id: auth.loginInfo.user.id,
-    city: "",
-    temp_min: 0.0,
-    temp_max: 0.0,
-    feels_like: 0.0
+  const setWeatherApiParams = () => {
+    configData.WEATHER_SEARCH.GET.params.city = suggestions[0].name
+    configData.WEATHER_SEARCH.GET.params.lat = suggestions[0].lat
+    configData.WEATHER_SEARCH.GET.params.lon = suggestions[0].lon
+    configData.WEATHER_SEARCH.GET.headers.Authorization = auth.loginInfo.user.jwt_token
   }
-  const weatherDataConfig = {
-    headers: {
-      Authorization: "",
-    },
-    params: {
-      city: "",
-      apiKey: "2953f7129ef8359cd1502a8bdf4995c1",
-      lat: 0.0,
-      lon: 0.0
-    }
-  };
+  const setWeatherSearchHistoryBody = (response) => {
+    configData.WEATHER_SEARCH_HISTORY.POST.body.user_id = auth.loginInfo.user.id
+    configData.WEATHER_SEARCH_HISTORY.POST.body.city = response.data.city;
+    configData.WEATHER_SEARCH_HISTORY.POST.body.feels_like = parseFloat(response.data.main.feels_like);
+    configData.WEATHER_SEARCH_HISTORY.POST.body.temp_max = parseFloat(response.data.main.temp_max);
+    configData.WEATHER_SEARCH_HISTORY.POST.body.temp_min = parseFloat(response.data.main.temp_min);
+    configData.WEATHER_SEARCH_HISTORY.POST.headers.headers.Authorization = auth.loginInfo.user.jwt_token
+  }
   const handleSearchWeather = async () => {
-
     console.log("suggestions: ", suggestions)
-
     if (city.trim() === '') {
       alert('Please enter a city name.');
       return;
     }
-    weatherDataConfig.params.city = suggestions[0].name
-    weatherDataConfig.params.lat = suggestions[0].lat
-    weatherDataConfig.params.lon = suggestions[0].lon
-    weatherDataConfig.headers.Authorization = auth.loginInfo.user.jwt_token
+    setWeatherApiParams();
+    console.log(configData)
     try {
-      await axios.get(weatherURL,
-        weatherDataConfig).then((response) => {
-         
-          setWeatherData({
-            city: response.data.city,
-            main: {
-              temp_min: response.data.main.temp_min,
-              temp_max: response.data.main.temp_max,
-              feels_like: response.data.main.feels_like
-            }
-          });
-          weatherHistoryBody.city = response.data.city;
-          weatherHistoryBody.feels_like = parseFloat(response.data.main.feels_like);
-          weatherHistoryBody.temp_max = parseFloat(response.data.main.temp_max);
-          weatherHistoryBody.temp_min = parseFloat(response.data.main.temp_min);
-          
+      await axios.get(
+        configData.WEATHER_SEARCH.baseUrl,
+        configData.WEATHER_SEARCH.GET
+      ).then((response) => {
+        setWeatherData({
+          city: response.data.city,
+          main: {
+            temp_min: response.data.main.temp_min,
+            temp_max: response.data.main.temp_max,
+            feels_like: response.data.main.feels_like
+          }
         });
+        setWeatherSearchHistoryBody(response)
+      });
     } catch (error) {
       handleError(error, navigate, "Could not fetch weather data")
     }
     try {
       await axios.post(
-        baseURL,
-       weatherHistoryBody,
-        {
-          headers: {
-            Authorization: auth.loginInfo.user.jwt_token,
-          }
-        }
+        configData.WEATHER_SEARCH_HISTORY.baseUrl,
+        configData.WEATHER_SEARCH_HISTORY.POST.body,
+        configData.WEATHER_SEARCH_HISTORY.POST.headers
       ).then((response) => {
         console.log("Inserted successfully")
-        
       })
     } catch (error) {
       handleError(error, navigate, "Could not insert weather search data")

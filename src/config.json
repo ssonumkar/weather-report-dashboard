@@ -1,0 +1,79 @@
+{
+    "LOGIN": {
+        "baseUrl": "http://localhost:8082/api/login",
+        "POST": {
+            "body": {
+                "username": "",
+                "password": ""
+            }
+        }
+    },
+    "REGISTER": {
+        "baseUrl": "http://localhost:8082/api/register",
+        "POST": {
+            "body": {
+                "username": "",
+                "password": "",
+                "dob": ""
+            }
+        }
+    },
+    "WEATHER_SEARCH": {
+        "baseUrl": "http://localhost:8082/api/weather",
+        "GET": {
+            "params": {
+                "city": "",
+                "apiKey": "2953f7129ef8359cd1502a8bdf4995c1",
+                "lat": 0.0,
+                "lon": 0.0
+            },
+            "headers": {
+                "Authorization": ""
+            }
+        }
+    },
+    "WEATHER_SEARCH_HISTORY": {
+        "baseUrl": "http://localhost:8082/api/weather/history",
+        "GET": {
+            "headers": {
+                "Authorization": ""
+            }
+        },
+        "POST": {
+            "body": {
+                "user_id": "",
+                "city": "",
+                "temp_min": 0.0,
+                "temp_max": 0.0,
+                "feels_like": 0.0
+            },
+            "headers": {
+                "headers": {
+                    "Authorization": ""
+                }
+            }
+        },
+        "PATCH": {
+            "body":{
+                "ids": []
+            },
+            "headers": {
+                "headers": {
+                    "Authorization": ""
+                }
+            }
+        }
+    },
+    "GEO": {
+        "baseUrl": "http://api.openweathermap.org/geo/1.0/direct",
+        "GET": {
+            "parameters": {
+                "params": {
+                    "q": "",
+                    "appid": "2953f7129ef8359cd1502a8bdf4995c1",
+                    "limit": 5
+                }
+            }
+        }
+    }
+}
