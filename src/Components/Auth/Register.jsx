@@ -19,12 +19,10 @@ export const Register = (props) => {
         configData.REGISTER.POST.body.password = password
         configData.REGISTER.POST.body.dob = dob
         
-        console.log("----",configData.REGISTER.POST.body)
-        console.log("URL: ", configData.REGISTER.POST.baseUrl)
         try {
             await axios.post(
                 configData.REGISTER.baseUrl,
-                configData.REGISTER.POST
+                configData.REGISTER.POST.body
                 ).then((response) => {
                     console.log(response)
                 })
