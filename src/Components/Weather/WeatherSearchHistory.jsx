@@ -23,6 +23,7 @@ export const WeatherSearchHistory = (props) => {
   }
   const loadWeatherHistory = async () => {
     try {
+      console.log(auth.loginInfo.user)
       updateGetWeatherSearchCongif()
       await axios.get(
         weatherGetSearchHistory,
@@ -32,7 +33,7 @@ export const WeatherSearchHistory = (props) => {
           setHistory(response.data)
       });
     } catch (error) {
-      handleError(error, navigate, "Could not fetch weather search history")
+      handleError(error, navigate, "Could not fetch weather search history", auth)
     }
   }
   const handleCheck = (e) => {
@@ -67,7 +68,7 @@ export const WeatherSearchHistory = (props) => {
         historyIds.clear()
       });
     } catch (error) {
-      handleError(error, navigate, "Could not delete weather search history")
+      handleError(error, navigate, "Could not delete weather search history", auth)
     }
   }
   return (
@@ -77,10 +78,12 @@ export const WeatherSearchHistory = (props) => {
       <h3>Weather Search History:</h3>
       <table className="table table-sm table-hover">
         <thead>
+          <tr>
           <th>City</th>
           <th>Temperature Minimum</th>
           <th>Temperature Maximum</th>
           <th>Feels Like</th>
+          </tr>
         </thead>
         <tbody>
           {
@@ -88,7 +91,7 @@ export const WeatherSearchHistory = (props) => {
               return (
 
                 <tr key={index}>
-                  <input name="historyCheckBox" type="Checkbox" id={data.id} onChange={handleCheck}></input>
+                  <td><input name="historyCheckBox" type="Checkbox" id={data.id} onChange={handleCheck}></input></td>
                   <td>{data.city}</td>
                   <td>{data.temp_min}</td>
                   <td>{data.temp_min}</td>

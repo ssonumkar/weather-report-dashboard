@@ -59,7 +59,7 @@ export const WeatherSearch = (props) => {
         setWeatherSearchHistoryBody(response)
       });
     } catch (error) {
-      handleError(error, navigate, "Could not fetch weather data")
+      handleError(error, navigate, "Could not fetch weather data", auth)
     }
     try {
       await axios.post(
@@ -70,7 +70,7 @@ export const WeatherSearch = (props) => {
         console.log("Inserted successfully")
       })
     } catch (error) {
-      handleError(error, navigate, "Could not insert weather search data")
+      handleError(error, navigate, "Could not insert weather search data", auth)
     }
   };
   const fetchSuggestions = async (query) => {
@@ -84,7 +84,7 @@ export const WeatherSearch = (props) => {
       });
       return response.data;
     } catch (error) {
-      handleError(error, navigate, 'Error fetching city suggestions');
+      handleError(error, navigate, 'Error fetching city suggestions', auth);
       return [];
     }
   };
@@ -118,7 +118,7 @@ export const WeatherSearch = (props) => {
                   aria-describedby="search-addon" list="suggestions" value={city} onChange={handleCityChange} />
                 <datalist id="suggestions">
                   {suggestions.map((suggestion) => (
-                    <option key={suggestion.id} >
+                    <option>
                       {suggestion.name}, {suggestion.state}, {suggestion.country}
                     </option>
                   ))}

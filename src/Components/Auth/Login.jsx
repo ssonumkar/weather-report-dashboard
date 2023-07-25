@@ -36,7 +36,7 @@ export const Login = (props) => {
       var message = ""
       if(error.response.data.error.includes("User already has a session logged in"))
       alert("User already has a session logged in, Only one session at a time is possible")
-      handleError(error, navigate, "Login Failed ")
+      handleError(error, navigate, "Login Failed ", auth)
     }
   }
   return (
