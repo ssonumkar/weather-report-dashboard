@@ -3,7 +3,7 @@ export function handleError(error, navigate, message) {
     switch (error.response.status) {
         case 401:      
             alert(message,': Unauthorized access.');
-            // navigate("/")
+            navigate("/")
             break;
     
         default: console.error(message, ": ", error, "Please try again.");
