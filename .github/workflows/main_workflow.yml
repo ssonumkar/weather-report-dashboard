@@ -17,17 +17,17 @@ jobs:
       # - name: Run Tests
       #   run: npm test
   deploy:
-      runs-on: ubuntu-latest
-      steps:
-          - name: get the code
-            uses: actions/checkout@v3
-          - name: install Node
-            uses: actions/setup-node
-            with:
-                node-version: 18.17.0
-          - name: Install Dependencies
-            run: npm ci
-          - name: Build project
-            run: npm run build
-          - name: Deploy
-            run: eho "Deploying"
+    runs-on: ubuntu-latest
+    steps:
+      - name: get the code
+        uses: actions/checkout@v3
+      - name: install Node
+        uses: actions/setup-node
+        with:
+            node-version: 18.17.0
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build project
+        run: npm run build
+      - name: Deploy
+        run: eho "Deploying"
