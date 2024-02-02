@@ -23,7 +23,7 @@ export const WeatherSearchHistory = (props) => {
   }
   const loadWeatherHistory = async () => {
     try {
-      console.log(auth.loginInfo.user)
+      console.log(auth.loginInfo.user.id)
       updateGetWeatherSearchCongif()
       await axios.get(
         weatherGetSearchHistory,
